@@ -115,7 +115,16 @@ export async function getLoggedInUser() {
         const result = await account.get();
 
         const user = await getUserInfo({ userId: result.$id });
-        return parseStringify(user);
+
+        const { database } = await createAdminClient();
+
+        const userBanks = await database.listDocuments(
+            DATABASE_ID!,
+            BANK_COLLECTION_ID!,
+            [Query.equal('userId', user.$id)]
+        )
+
+        return parseStringify({ ...user, userHasBanks: userBanks.documents.length > 0 });
     } catch (error) {
         console.error(error);
         return null;
@@ -286,7 +295,7 @@ export const getBankByAccountId = async ({ accountId }: getBankByAccountIdProps)
             [Query.equal('accountId', [accountId])]
         )
 
-        if (bank.total !== 1 ) return null;
+        if (bank.total !== 1) return null;
 
         return parseStringify(bank.documents[0]);
     } catch (error) {

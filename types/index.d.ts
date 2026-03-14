@@ -2,7 +2,7 @@
 
 declare type SearchParamProps = {
   params: { [key: string]: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 // ========================================
@@ -75,8 +75,8 @@ declare type Transaction = {
   category: string;
   date: string;
   image: string;
-  type: string;
   $createdAt: string;
+  $updatedAt: string;
   channel: string;
   senderBankId: string;
   receiverBankId: string;

@@ -8,9 +8,9 @@ export default async function RootLayout({
     children: React.ReactNode;
 }>) {
     
-    const isLoggedIn = await getLoggedInUser();
+    const data = await getLoggedInUser();
 
-    if (isLoggedIn) redirect('/');
+    if (data && data.userHasBanks) redirect('/');
 
     return (
         <main className="flex min-h-screen w-full justify-between font-inter">
